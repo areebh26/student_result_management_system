@@ -82,11 +82,11 @@ class Course{
     }
 
     public static int getTotalCourses() {
-        return totalCourses;
+        return totalCourse;
     }
 
     public static void setTotalCourses(int totalCourses) {
-        Course.totalCourses = totalCourses;
+        Course.totalCourse = totalCourses;
     }
 
     @Override
