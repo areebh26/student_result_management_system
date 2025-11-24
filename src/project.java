@@ -98,6 +98,12 @@ class Course{
                 "\ninstructor : " + instructor.getName();
     }
 }
+interface resultCal{
+    static double passingMarks=50;
+    double calculateTotal();
+    double calculatePercentage();
+    double calculateGrade();
+}
 
 
 
