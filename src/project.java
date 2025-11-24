@@ -100,11 +100,11 @@ class Course{
                 "\ninstructor : " + instructor.getName();
     }
 }
-interface resultCal{
+interface ResultCal{
     static double passingMarks=50;
     double calculateTotal();
     double calculatePercentage();
-    double calculateGrade();
+    String calculateGrade();
 }
 class ResultEntry{
     private Course course;
@@ -145,6 +145,9 @@ class Transcript{
         this.list = new ArrayList<>();
 
     }
+    public ArrayList<ResultEntry> getResults() {
+        return list;
+    }
     public void addResultEntry(ResultEntry r) {
         list.add(r);
     }
@@ -180,7 +183,69 @@ class Transcript{
         return totalWeightedPoints / totalCredits;
     }
 }
+ abstract class Student implements ResultCal{
+    protected String studentId;
+    protected String name;
+    protected String program;
+    protected Transcript transcript;
+    static int totalStudents = 0;
+    public Student(String studentId, String name, String program,Transcript  transcript) {
+        this.studentId = studentId;
+        this.name = name;
+        this.program = program;
+        this.transcript = transcript;
+        totalStudents++;
+    }
+    public void addResult(ResultEntry result) {
+        transcript.addResultEntry(result);
+    }
+    @Override
+    public double calculateTotal() {
+        double total = 0;
+        for (ResultEntry entry : transcript.getResults()) {
+            total += entry.getMarksObtianed();
+        }
+        return total;
+    }
+    @Override
+    public double calculatePercentage() {
+        double totalObtained = calculateTotal();
+        int numberOfCourses = transcript.getResults().size();
+        if (numberOfCourses == 0) return 0.0;
+        double totalMaxMarks = numberOfCourses * 100.0;
+        return (totalObtained / totalMaxMarks) * 100;
+    }
+    @Override
+    public String calculateGrade() {
+        double percentage = calculatePercentage();
 
+        if (percentage >= 85) return "A";
+        else if (percentage >= 75) return "B";
+        else if (percentage >= 65) return "C";
+        else if (percentage >= 50) return "D";
+        else return "F";
+    }
+
+    // Getter for Transcript (needed for the GUI later)
+    public Transcript getTranscript() {
+        return transcript;
+    }
+}
+ class ScienceStudent extends Student {
+    public ScienceStudent(String studentId, String name,Transcript transcript) {
+        super(studentId, name, "Science",transcript);
+    }
+}
+class ArtsStudent extends Student {
+    public ArtsStudent(String studentId, String name,Transcript transcript) {
+        super(studentId, name, "Arts",transcript);
+    }
+}
+class EngineeringStudent extends Student {
+    public EngineeringStudent(String studentId, String name,Transcript transcript) {
+        super(studentId, name, "Engineering",transcript);
+    }
+}
 
 
 
