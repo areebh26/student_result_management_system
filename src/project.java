@@ -1,4 +1,6 @@
-  class CourseInstructor{
+import java.util.ArrayList;
+
+class CourseInstructor{
     private String name;
     private String qualification;
 
@@ -103,6 +105,80 @@ interface resultCal{
     double calculateTotal();
     double calculatePercentage();
     double calculateGrade();
+}
+class ResultEntry{
+    private Course course;
+    private double marksObtianed;
+
+    public ResultEntry(Course course, double marksObtianed) {
+        this.course = course;
+        this.marksObtianed = marksObtianed;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+    public double getMarksObtianed() {
+        return marksObtianed;
+    }
+
+    public void setMarksObtianed(double marksObtianed) {
+        this.marksObtianed = marksObtianed;
+    }
+
+    @Override
+    public String toString() {
+        return "Result : " +
+                "\ncourse : " + course.getTitle() +
+                "\nmarksObtianed=" + marksObtianed;
+    }
+}
+class Transcript{
+    private ArrayList<ResultEntry> list ;
+
+    public Transcript(ArrayList<ResultEntry> list) {
+        this.list = new ArrayList<>();
+
+    }
+    public void addResultEntry(ResultEntry r) {
+        list.add(r);
+    }
+    public double getGPA() {
+        double totalWeightedPoints = 0;
+        int totalCredits = 0;
+        for (int i = 0; i < list.size(); i++) {
+            ResultEntry entry = list.get(i);
+            double marks = entry.getMarksObtianed();
+            int credits = entry.getCourse().getCreditHours();
+            double gradePoint = 0;
+            if (marks >= 85) {
+                gradePoint = 4.0;
+            } else if (marks >= 80) {
+                gradePoint = 3.7;
+            } else if (marks >= 75) {
+                gradePoint = 3.3;
+            } else if (marks >= 70) {
+                gradePoint = 3.0;
+            } else if (marks >= 60) {
+                gradePoint = 2.0;
+            } else if (marks >= 50) {
+                gradePoint = 1.0;
+            } else {
+                gradePoint = 0.0;
+            }
+            totalWeightedPoints = totalWeightedPoints + (gradePoint * credits);
+            totalCredits = totalCredits + credits;
+        }
+        if (totalCredits == 0) {
+            return 0.0;
+        }
+        return totalWeightedPoints / totalCredits;
+    }
 }
 
 
